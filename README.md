@@ -1,88 +1,117 @@
-# Server Sync Mod Template
+# TouchGrass
 
-Can be used to already have your project set up and ready to go with ServerSync and basic version checking. Please see the [Original Repository](https://github.com/blaxxun-boop/ServerSync) if you have to update, or have further questions this template might not answer.
+TouchGrass adds practical training tools for Valheim while discouraging unattended skill farming. It provides a training dummy meter, configurable dummy damage tests, dummy crowding limits, archery target tuning, per-skill gain/loss modifiers, and stationary skill fatigue.
 
-Thank you Blaxxun for ServerSync!
+![](https://i.ibb.co/HD6L1d27/Screenshot-2026-05-11-195741.png) <br>
+![](https://i.ibb.co/ymJpCyvq/1-meter.gif) <br>
+You can check dps, dph and damage taken through training dummy hud. <br>
 
-ServerSync
-==========
+![](https://i.ibb.co/Mky1kTd4/2-damagetype.gif) <br>
+Training dummy's damage number and type and its health are configurable. <br>
+So you can test different damage types and resistances. <br>
+Check out this mod to make resistance additive. https://thunderstore.io/c/valheim/p/sighsorry/AdditiveDamageModifier/ <br>
+![](https://i.ibb.co/zc7tSkV/4-crowded.png) <br>
+Limit number of dummies that can be built within configured area. <br>
+![](https://i.ibb.co/pBQdJk8J/3-discourage.gif) <br>
+Maco skill farming is discouraged with smart stationary fatigue.
 
-Bundling the dll
-----------------
+## Main Features
 
-You need to ensure the dll is available to your mod.
+- Training dummy HUD for outgoing damage, incoming dummy damage, DPS, DPH, hit count, time, and recent skill XP.
+- Configurable training dummy health, recipe, damage amount, and damage type.
+- Use a training dummy to edit that dummy's damage amount and damage type in game.
+- Optional crowding rule that blocks dense dummy placement with `Too crowded Bro!`.
+- Stationary fatigue that gradually reduces repeated farmable skill gains inside the same X/Z radius.
+- Archery target skill multiplier, recipe override, and an arrow/bolt-only skill gain gate.
+- Per-skill gain and death-loss multipliers.
 
-Including the dll is best done via ILRepack (https://github.com/ravibpatel/ILRepack.Lib.MSBuild.Task). You can load this package (ILRepack.Lib.MSBuild.Task) from NuGet.
+TouchGrass is not a hard anti-cheat system. It is meant to make common macro farms less efficient while keeping normal combat, movement, and testing usable.
 
-Then create a file ILRepack.targets in your project folder. File content:
-```
-<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Target Name="ILRepacker" AfterTargets="Build">
-        <ItemGroup>
-            <InputAssemblies Include="$(TargetPath)" />
-            <InputAssemblies Include="$(OutputPath)\ServerSync.dll" />
-        </ItemGroup>
-        <ILRepack Parallel="true" DebugInfo="true" Internalize="true" InputAssemblies="@(InputAssemblies)" OutputFile="$(TargetPath)" TargetKind="SameAsPrimaryAssembly" LibraryPath="$(OutputPath)" />
-    </Target>
-</Project>
-```
+## Training Dummy
 
-Using the ServerSync
---------------------
+Training dummy settings include:
 
-Declare a variable:
+- `Training Dummy Health`: max health for `piece_TrainingDummy`. Default: `2500`.
+- `Training Dummy Crowding Radius`: X/Z radius for crowded placement checks. Default: `4`.
+- `Training Dummy Crowding Max Count`: maximum existing dummies allowed in that radius. Default: `4`, so the 5th is blocked.
+- `Training Dummy Recipe`: default `FineWood:5,BronzeNails:10,Ectoplasm:5`.
+- `Training Dummy Damage Type`: default dummy damage type. Default: `Blunt`.
+- `Training Dummy Damage`: default dummy damage amount. Default: `1`.
+- `Training Meter Display`: `Detailed` or `Off`.
+- `Training Meter Window Seconds`: rolling HUD window and HUD lifetime after dummy interaction. Default: `15`.
 
-`ServerSync.ConfigSync configSync = new ServerSync.ConfigSync("my.mod.guid") { DisplayName = "My Mod Name", CurrentVersion = "1.2.3", MinimumRequiredVersion = "1.2.0" };`
+Use a training dummy to open the TouchGrass dummy settings window. The window changes only that dummy's damage amount and damage type. Health stays controlled by config.
 
-All of DisplayName, CurrentVersion and MinimumRequiredVersion are optional.
-If CurrentVersion is specified, then the user will see a warning in their BepInEx log if the server version does not match the client version.
-If also MinimumRequiredVersion is specified and the client has an older version than the servers MinimumRequiredVersion, the client will be immediately disconnected and see an error message, explaining why.
-To display a friendly name for your mod in the error messages, specify DisplayName, otherwise the primary identifier will be used.
-Also note that the primary identifier (I propose using the GUID, "my.mod.guid") should never be changed (changing it will break backwards compatibility completely).
+## Training Meter
 
-There are two public methods on the ServerSync.ConfigSync class:
+The training meter appears after interacting with a training dummy and uses a rolling time window.
 
-- `AddConfigEntry<T>(ConfigEntry<T> configEntry)`
+`ToDummy` shows local outgoing hit attempts against training dummies:
 
-  Registers a BepInEx ConfigEntry to be synchronized.
+- `Attempt`: total direct hit damage recorded in the window.
+- `Status`: total status-style damage recorded separately when present.
+- `DPH`: `Attempt / Hits`.
+- `DPS`: `Attempt / Time`.
+- `Hits`: number of recorded direct hits.
+- `Time`: active window duration.
 
-- `AddLockingConfigEntry<T>(ConfigEntry<T> lockingConfig) where T : IConvertible`
+`FromDummy` shows the latest incoming dummy damage breakdown:
 
-  Registers a BepInEx ConfigEntry to be synchronized, whose value determines whether the config is locked. If the value is zero when converted to integer, the config is not locked. Otherwise it is locked.
-  This method must be called at most once. If not called at all, the config will never be locked.
+`Raw - Blocked - Resist - Armor = Final`
 
-Useful properties:
+If the hit applies status damage, the HUD also shows `Status`. The breakdown is a practical readout for dummy testing, not a replacement for Valheim's internal combat log.
 
-- `static bool ProcessingServerUpdate`
+`Skill` shows the latest supported skill gain recorded during the dummy session. The percentage compares final XP gained against raw action base XP and includes Valheim skill gain rate, status/equipment raise-skill modifiers, TouchGrass per-skill gain rate, and stationary fatigue.
 
-  The mod is receiving and applying configs from the server. Used internally to avoid config writing loops.
+Drag the HUD with the left mouse button to move it. HUD width and scale are fixed to keep the config surface small.
 
-- `bool IsSourceOfTruth`
+## Skill Fatigue
 
-  Whether the local config is currently being used. False if a remote config is currently applied.
+Stationary fatigue applies to supported farmable skill gains when they keep chaining inside the same X/Z radius.
 
-Additionally, there is a class `ServerSync.CustomSyncedValue<T>(ConfigSync, string Identifier, T value = default)` to synchronize arbitrary data (more precisely: all data which Valheims native serialization supports).
-This class registers itself to the passed ConfigSync instance upon instantiation.
-It provides a Value property and a ValueChanged event handler.
-The Identifier must be unique for the given ConfigSync instance.
+Defaults:
 
+- Full efficiency for `120` seconds.
+- Fade over the next `180` seconds.
+- Minimum multiplier `10%`.
+- Stationary radius `4m` on the X/Z plane.
 
-Handy config function
----------------------
+The fatigue is global, not per skill. Rotating between weapons, movement skills, dodge, sneak, swim, or similar farmable actions in one place pushes the same multiplier down.
 
-To avoid manually adding each config entry to the ConfigSync instance, I propose to add a simple wrapper `config()` (with the same signature as `Config.Bind()`) to your UnityBasePlugin class:
+Waiting inside the same radius does not recover fatigue. The fatigue resets naturally when the player earns a supported skill XP tick outside the stationary radius.
 
-```
-ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
-{
-    ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
+When fatigue is reducing skill gain, TouchGrass can show a local status effect. `Detailed` shows the icon, current efficiency, and the compendium text `Touch the grass Bro!`; `Off` hides it.
 
-    SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
-    syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
+## Archery Target
 
-    return configEntry;
-}
+- `Archery Target Skill Multiplier`: multiplier for skill XP from `piece_ArcheryTarget`. Default: `1`.
+- `Archery Target Arrow Bolt Skill Only`: when `On`, only arrow and bolt ammo can award archery target skill XP. Other projectiles can still score hits. Default: `On`.
+- `Archery Target Recipe`: default `FineWood:4,LeatherScraps:10`.
 
-ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
-```
+## Per-Skill Modifiers
+
+TouchGrass adds per-skill entries for:
+
+- `Skill Gain Rate`
+- `Skill Reduction Rate`
+
+These are multiplicative modifiers. They do not replace Valheim's existing global modifiers or status/equipment modifiers.
+
+Example:
+
+`1.5 vanilla gain * 0.8 TouchGrass Swords gain * 0.5 fatigue = 0.6x final gain`
+
+`Skill Reduction Rate` works the same way for death skill loss. `0` disables TouchGrass-applied loss for that skill, `1` keeps vanilla-scaled behavior, and `2` doubles it after vanilla scaling.
+
+## Recipe Overrides
+
+Recipe overrides use item prefab names:
+
+`ItemPrefab:Amount,ItemPrefab:Amount`
+
+Examples:
+
+- Training dummy: `FineWood:5,BronzeNails:10,Ectoplasm:5`
+- Archery target: `FineWood:4,LeatherScraps:10`
+
+Leave a recipe empty to keep vanilla costs. Use `None`, `Free`, or `-` for no cost. Materials are always recovered when dismantling. Invalid recipe strings fall back to the vanilla recipe.

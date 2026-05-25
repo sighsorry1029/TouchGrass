@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerSyncModTemplate", "ServerSyncModTemplate.csproj", "{4358610B-F3F4-4843-B7AF-98B7BC60DCDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchGrass", "TouchGrass.csproj", "{4358610B-F3F4-4843-B7AF-98B7BC60DCDE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7E7EDC8-52C1-48E7-93D4-E4D52D6135FD}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

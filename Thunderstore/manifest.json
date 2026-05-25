@@ -1,9 +1,9 @@
 {
-  "name": "ServerSyncModTemplate",
-  "version_number": "1.0.0",
-  "website_url": "https://discord.gg/pdHgy6Bsng",
-  "description": "Your mod description goes here. Do not forget to replace the icon.png file with your own. Must be 256x256. Your Readme.md file will be copied from the one in your project folder.",
+  "name": "TouchGrass",
+  "version_number": "1.0.1",
+  "website_url": "https://discord.gg/jkcJCq2sK5",
+  "description": "In-game training meter for practical damage and XP testing(DPS).Configurable training dummy damage. Dummy crowding limits. Discourages unattended macro skill farming with smart stationary fatigue and per-skill gain/loss tuning.",
   "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2202"
+    "denikson-BepInExPack_Valheim-5.4.2333"
   ]
 }

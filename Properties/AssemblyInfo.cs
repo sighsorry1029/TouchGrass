@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using ServerSyncModTemplate;
+using TouchGrass;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle(ServerSyncModTemplatePlugin.ModName)]
+[assembly: AssemblyTitle(TouchGrassPlugin.ModName)]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(ServerSyncModTemplatePlugin.Author)]
-[assembly: AssemblyProduct(ServerSyncModTemplatePlugin.ModName)]
+[assembly: AssemblyCompany(TouchGrassPlugin.Author)]
+[assembly: AssemblyProduct(TouchGrassPlugin.ModName)]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using ServerSyncModTemplate;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion(ServerSyncModTemplatePlugin.ModVersion)]
-[assembly: AssemblyFileVersion(ServerSyncModTemplatePlugin.ModVersion)]
+[assembly: AssemblyVersion(TouchGrassPlugin.ModVersion)]
+[assembly: AssemblyFileVersion(TouchGrassPlugin.ModVersion)]
