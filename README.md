@@ -115,3 +115,6 @@ Examples:
 - Archery target: `FineWood:4,LeatherScraps:10`
 
 Leave a recipe empty to keep vanilla costs. Use `None`, `Free`, or `-` for no cost. Materials are always recovered when dismantling. Invalid recipe strings fall back to the vanilla recipe.
+
+## Github
+https://github.com/sighsorry1029/TouchGrass
