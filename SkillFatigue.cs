@@ -220,11 +220,10 @@ internal static class SkillEarnGate
         return Mathf.Max(1f, TouchGrassPlugin._locationFullEfficiencySeconds.Value + TouchGrassPlugin._locationFadeSeconds.Value);
     }
 
-    internal readonly struct FatigueSnapshot(float globalMultiplier)
+    internal readonly struct FatigueSnapshot(float multiplier)
     {
         internal static readonly FatigueSnapshot Empty = new(1f);
-        internal readonly float FinalMultiplier = globalMultiplier;
-        internal readonly float GlobalMultiplier = globalMultiplier;
+        internal readonly float Multiplier = multiplier;
     }
 
     private struct LocationFatigueState
@@ -391,7 +390,7 @@ internal class TouchGrassFatigueStatusEffect : StatusEffect
     public override string GetIconText()
     {
         return SkillEarnGate.TryGetFatigueSnapshot(out SkillEarnGate.FatigueSnapshot snapshot)
-            ? $"{Mathf.RoundToInt(snapshot.FinalMultiplier * 100f)}%"
+            ? $"{Mathf.RoundToInt(snapshot.Multiplier * 100f)}%"
             : "";
     }
 

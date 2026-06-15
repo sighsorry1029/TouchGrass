@@ -15,7 +15,7 @@ namespace TouchGrass;
 public class TouchGrassPlugin : BaseUnityPlugin
 {
     internal const string ModName = "TouchGrass";
-    internal const string ModVersion = "1.0.1";
+    internal const string ModVersion = "1.0.4";
     internal const string Author = "sighsorry";
     private const string ModGUID = $"{Author}.{ModName}";
     private static string ConfigFileName = $"{ModGUID}.cfg";
@@ -77,6 +77,7 @@ public class TouchGrassPlugin : BaseUnityPlugin
         _trainingDummyHealth = config("3 - Training Dummy", "Training Dummy Health", 2500f, new ConfigDescription("Max health applied to piece_TrainingDummy.", new AcceptableValueRange<float>(1f, 100000f)));
         _trainingDummyCrowdingRadius = config("3 - Training Dummy", "Training Dummy Crowding Radius", 4f, new ConfigDescription("XZ radius used to discourage placing too many training dummies in one spot. 0 disables the crowding check.", new AcceptableValueRange<float>(0f, 50f)));
         _trainingDummyCrowdingMaxCount = config("3 - Training Dummy", "Training Dummy Crowding Max Count", 4, new ConfigDescription("Maximum existing training dummies allowed inside the crowding radius. 4 means the 5th placement is discouraged. 0 disables the crowding check.", new AcceptableValueRange<int>(0, 100)));
+        _trainingDummyNightAggro = config("3 - Training Dummy", "Training Dummy Night Aggro", Toggle.Off, "If on, training dummies detect players in a 16m radius at night and slide close enough for their native attack.");
         _trainingDummyRecipe = config("3 - Training Dummy", "Training Dummy Recipe", "FineWood:5,BronzeNails:10,Ectoplasm:5", "Recipe override for piece_TrainingDummy. Leave empty to keep vanilla, use None for no cost, or use ItemPrefab:Amount,ItemPrefab:Amount. Default: FineWood:5,BronzeNails:10,Ectoplasm:5. Materials are always recovered when dismantling.");
         _localTrainingDummyDamageType = config("3 - Training Dummy", "Training Dummy Damage Type", TrainingDummyDamageType.Blunt, "Damage type used by local training dummy damage tests.", false);
         _localTrainingDummyDamageAmount = config("3 - Training Dummy", "Training Dummy Damage", 1f, new ConfigDescription("Damage amount used by local training dummy damage tests.", new AcceptableValueRange<float>(1f, 500f)), false);
@@ -185,6 +186,7 @@ public class TouchGrassPlugin : BaseUnityPlugin
     internal static ConfigEntry<float> _trainingDummyHealth = null!;
     internal static ConfigEntry<float> _trainingDummyCrowdingRadius = null!;
     internal static ConfigEntry<int> _trainingDummyCrowdingMaxCount = null!;
+    internal static ConfigEntry<Toggle> _trainingDummyNightAggro = null!;
     internal static ConfigEntry<float> _archeryTargetSkillMultiplier = null!;
     internal static ConfigEntry<Toggle> _archeryTargetArrowBoltSkillOnly = null!;
     internal static ConfigEntry<string> _trainingDummyRecipe = null!;
@@ -209,6 +211,7 @@ public class TouchGrassPlugin : BaseUnityPlugin
     private void BindTrainingObjectConfigEvents()
     {
         _trainingDummyHealth.SettingChanged += (_, _) => TrainingObjectTuning.ApplyAll();
+        _trainingDummyNightAggro.SettingChanged += (_, _) => TrainingObjectTuning.ApplyAll();
         _archeryTargetSkillMultiplier.SettingChanged += (_, _) => TrainingObjectTuning.ApplyAll();
         _trainingDummyRecipe.SettingChanged += (_, _) => PieceRecipeTuning.ApplyAll();
         _archeryTargetRecipe.SettingChanged += (_, _) => PieceRecipeTuning.ApplyAll();

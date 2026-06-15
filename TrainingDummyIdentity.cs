@@ -6,12 +6,8 @@ namespace TouchGrass;
 internal static class TrainingDummyIdentity
 {
     internal const string PiecePrefabName = "piece_TrainingDummy";
-    internal const string CharacterPrefabName = "TrainingDummy";
-    internal const string LocalizationKey = "$piece_trainingdummy";
 
-    internal static readonly string[] PrefabNames = [PiecePrefabName, CharacterPrefabName];
     private static readonly int PiecePrefabHash = StringExtensionMethods.GetStableHashCode(PiecePrefabName);
-    private static readonly int CharacterPrefabHash = StringExtensionMethods.GetStableHashCode(CharacterPrefabName);
 
     internal static bool IsTrainingDummy(Character character)
     {
@@ -20,13 +16,14 @@ internal static class TrainingDummyIdentity
             return false;
         }
 
-        if (character.m_name == LocalizationKey)
+        ZNetView? netView = GetNetView(character);
+        if (HasTrainingDummyPrefab(netView))
         {
             return true;
         }
 
-        ZNetView? netView = GetNetView(character);
-        if (HasTrainingDummyPrefab(netView))
+        Piece? piece = character.GetComponentInParent<Piece>();
+        if (piece != null && IsTrainingDummy(piece))
         {
             return true;
         }
@@ -41,11 +38,6 @@ internal static class TrainingDummyIdentity
             return false;
         }
 
-        if (piece.m_name == LocalizationKey)
-        {
-            return true;
-        }
-
         ZNetView? netView = GetNetView(piece);
         if (HasTrainingDummyPrefab(netView))
         {
@@ -55,18 +47,9 @@ internal static class TrainingDummyIdentity
         return IsTrainingDummyPrefabName(Utils.GetPrefabName(piece.gameObject));
     }
 
-    internal static bool HasTrainingDummyZdoPrefab(Character character)
-    {
-        ZNetView? netView = GetNetView(character);
-        return netView != null &&
-               netView.IsValid() &&
-               netView.GetZDO() != null &&
-               IsTrainingDummyPrefabHash(netView.GetZDO().GetPrefab());
-    }
-
     internal static ZNetView? GetNetView(Component? component)
     {
-        return component != null ? component.GetComponent<ZNetView>() : null;
+        return component != null ? component.GetComponent<ZNetView>() ?? component.GetComponentInParent<ZNetView>() : null;
     }
 
     private static bool HasTrainingDummyPrefab(ZNetView? netView)
@@ -87,12 +70,11 @@ internal static class TrainingDummyIdentity
     private static bool IsTrainingDummyPrefabName(string prefabName)
     {
         return !string.IsNullOrEmpty(prefabName) &&
-               (string.Equals(prefabName, PiecePrefabName, StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(prefabName, CharacterPrefabName, StringComparison.OrdinalIgnoreCase));
+               string.Equals(prefabName, PiecePrefabName, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsTrainingDummyPrefabHash(int prefabHash)
     {
-        return prefabHash == PiecePrefabHash || prefabHash == CharacterPrefabHash;
+        return prefabHash == PiecePrefabHash;
     }
 }

@@ -10,7 +10,7 @@ internal static class TrainingDummyCrowding
     {
         if (player == null ||
             piece == null ||
-            !TrainingDummyDamageTest.IsTrainingDummy(piece) ||
+            !TrainingDummyIdentity.IsTrainingDummy(piece) ||
             player.m_placementGhost == null)
         {
             return true;

@@ -8,7 +8,7 @@ internal static class TrainingDummyRegistry
 
     internal static void Register(Character character)
     {
-        if (character == null || !TrainingDummyIdentity.HasTrainingDummyZdoPrefab(character))
+        if (character == null || !TrainingDummyIdentity.IsTrainingDummy(character))
         {
             return;
         }

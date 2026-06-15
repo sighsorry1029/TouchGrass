@@ -7,7 +7,6 @@ namespace TouchGrass;
 
 internal static class PieceRecipeTuning
 {
-    private const string TrainingDummyPrefabName = "piece_TrainingDummy";
     private const string ArcheryTargetPrefabName = "piece_ArcheryTarget";
     private static readonly Dictionary<string, Piece.Requirement[]> VanillaRecipes = new(StringComparer.OrdinalIgnoreCase);
 
@@ -19,7 +18,7 @@ internal static class PieceRecipeTuning
             return;
         }
 
-        ApplyRecipe(scene, TrainingDummyPrefabName, TouchGrassPlugin._trainingDummyRecipe?.Value);
+        ApplyRecipe(scene, TrainingDummyIdentity.PiecePrefabName, TouchGrassPlugin._trainingDummyRecipe?.Value);
         ApplyRecipe(scene, ArcheryTargetPrefabName, TouchGrassPlugin._archeryTargetRecipe?.Value);
     }
 

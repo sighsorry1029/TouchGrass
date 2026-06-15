@@ -78,7 +78,7 @@ internal static class CharacterGetHoverTextPatch
 {
     private static void Postfix(Character __instance, ref string __result)
     {
-        if (TrainingDummyDamageTest.IsTrainingDummy(__instance))
+        if (TrainingDummyIdentity.IsTrainingDummy(__instance))
         {
             __result = TrainingDummySettingsWindow.GetHoverText(__result);
         }

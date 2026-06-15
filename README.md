@@ -13,14 +13,18 @@ Check out this mod to make resistance additive. https://thunderstore.io/c/valhei
 ![](https://i.ibb.co/zc7tSkV/4-crowded.png) <br>
 Limit number of dummies that can be built within configured area. <br>
 ![](https://i.ibb.co/pBQdJk8J/3-discourage.gif) <br>
-Maco skill farming is discouraged with smart stationary fatigue.
+Macro skill farming is discouraged with smart stationary fatigue. <br>
 
+![](https://i.ibb.co/KpbtmXyt/angels2.gif) <br>
+![](https://i.ibb.co/5xtb2KkK/angels.gif) <br>
+Dummies can hunt you down at night. Beware... <br>
 ## Main Features
 
 - Training dummy HUD for outgoing damage, incoming dummy damage, DPS, DPH, hit count, time, and recent skill XP.
 - Configurable training dummy health, recipe, damage amount, and damage type.
 - Use a training dummy to edit that dummy's damage amount and damage type in game.
 - Optional crowding rule that blocks dense dummy placement with `Too crowded Bro!`.
+- Optional night aggro that makes training dummies slide toward nearby players at night.
 - Stationary fatigue that gradually reduces repeated farmable skill gains inside the same X/Z radius.
 - Archery target skill multiplier, recipe override, and an arrow/bolt-only skill gain gate.
 - Per-skill gain and death-loss multipliers.
@@ -34,6 +38,7 @@ Training dummy settings include:
 - `Training Dummy Health`: max health for `piece_TrainingDummy`. Default: `2500`.
 - `Training Dummy Crowding Radius`: X/Z radius for crowded placement checks. Default: `4`.
 - `Training Dummy Crowding Max Count`: maximum existing dummies allowed in that radius. Default: `4`, so the 5th is blocked.
+- `Training Dummy Night Aggro`: when `On`, dummies detect players in a 16m radius at night and slide close enough for their native attack. Default: `Off`.
 - `Training Dummy Recipe`: default `FineWood:5,BronzeNails:10,Ectoplasm:5`.
 - `Training Dummy Damage Type`: default dummy damage type. Default: `Blunt`.
 - `Training Dummy Damage`: default dummy damage amount. Default: `1`.
@@ -116,5 +121,5 @@ Examples:
 
 Leave a recipe empty to keep vanilla costs. Use `None`, `Free`, or `-` for no cost. Materials are always recovered when dismantling. Invalid recipe strings fall back to the vanilla recipe.
 
-## Github
+## GitHub
 https://github.com/sighsorry1029/TouchGrass

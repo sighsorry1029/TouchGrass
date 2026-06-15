@@ -19,15 +19,11 @@ internal static class TrainingObjectTuning
             return;
         }
 
-        foreach (string prefabName in TrainingDummyIdentity.PrefabNames)
+        GameObject trainingDummyPrefab = scene.GetPrefab(TrainingDummyIdentity.PiecePrefabName);
+        Character? trainingDummy = trainingDummyPrefab != null ? trainingDummyPrefab.GetComponentInChildren<Character>(includeInactive: true) : null;
+        if (trainingDummy != null)
         {
-            GameObject prefab = scene.GetPrefab(prefabName);
-            Character? character = prefab != null ? prefab.GetComponentInChildren<Character>(includeInactive: true) : null;
-            if (character != null)
-            {
-                ApplyTrainingDummy(character);
-                EnsureTrainingDummyInteraction(character);
-            }
+            ApplyTrainingDummy(trainingDummy);
         }
 
         GameObject archeryTargetPrefab = scene.GetPrefab("piece_ArcheryTarget");
@@ -40,12 +36,13 @@ internal static class TrainingObjectTuning
 
     internal static void ApplyTrainingDummy(Character character)
     {
-        if (character == null || !TrainingDummyDamageTest.IsTrainingDummy(character))
+        if (character == null || !TrainingDummyIdentity.IsTrainingDummy(character))
         {
             return;
         }
 
         EnsureTrainingDummyInteraction(character);
+        EnsureTrainingDummyNightAggro(character);
 
         ZNetView? netView = character.m_nview != null ? character.m_nview : TrainingDummyIdentity.GetNetView(character);
         float desiredHealth = GetTrainingDummyHealth();
@@ -87,7 +84,7 @@ internal static class TrainingObjectTuning
 
     internal static void EnsureTrainingDummyInteraction(Character character)
     {
-        if (character == null || !TrainingDummyDamageTest.IsTrainingDummy(character))
+        if (character == null || !TrainingDummyIdentity.IsTrainingDummy(character))
         {
             return;
         }
@@ -96,6 +93,22 @@ internal static class TrainingObjectTuning
         {
             character.gameObject.AddComponent<TrainingDummySettingsInteractable>();
         }
+    }
+
+    private static void EnsureTrainingDummyNightAggro(Character character)
+    {
+        if (character == null || !TrainingDummyIdentity.IsTrainingDummy(character))
+        {
+            return;
+        }
+
+        TrainingDummyNightAggro component = character.GetComponent<TrainingDummyNightAggro>();
+        if (component == null)
+        {
+            component = character.gameObject.AddComponent<TrainingDummyNightAggro>();
+        }
+
+        component.enabled = TouchGrassPlugin._trainingDummyNightAggro?.Value == TouchGrassPlugin.Toggle.On;
     }
 
     private static void ApplyLoadedTrainingDummies()

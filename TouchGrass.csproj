@@ -120,6 +120,7 @@
         <Compile Include="TrainingDummyCrowding.cs"/>
         <Compile Include="TrainingDummyDamageProfile.cs"/>
         <Compile Include="TrainingDummyIdentity.cs"/>
+        <Compile Include="TrainingDummyNightAggro.cs"/>
         <Compile Include="TrainingDummyRegistry.cs"/>
         <Compile Include="TrainingDummySettings.cs"/>
         <Compile Include="TrainingMeter.cs"/>

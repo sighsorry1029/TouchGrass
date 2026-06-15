@@ -14,7 +14,7 @@ internal sealed class TrainingDummySettingsInteractable : MonoBehaviour, Interac
         }
 
         Character character = GetComponent<Character>();
-        if (character == null || !TrainingDummyDamageTest.IsTrainingDummy(character))
+        if (character == null || !TrainingDummyIdentity.IsTrainingDummy(character))
         {
             return false;
         }
@@ -62,7 +62,7 @@ internal static class TrainingDummySettingsWindow
 
     internal static void Open(Character target)
     {
-        if (target == null || !TrainingDummyDamageTest.IsTrainingDummy(target))
+        if (target == null || !TrainingDummyIdentity.IsTrainingDummy(target))
         {
             return;
         }

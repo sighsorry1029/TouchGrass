@@ -56,7 +56,7 @@ internal static class TrainingMeter
 
     internal static void RecordOutgoingDamage(Character target, HitData hit)
     {
-        if (!IsEnabled() || target == null || hit == null || !TrainingDummyDamageTest.IsTrainingDummy(target))
+        if (!IsEnabled() || target == null || hit == null || !TrainingDummyIdentity.IsTrainingDummy(target))
         {
             return;
         }
@@ -97,7 +97,7 @@ internal static class TrainingMeter
 
         _activeIncomingDamageState = null;
         Character attacker = hit.GetAttacker();
-        if (!TrainingDummyDamageTest.IsTrainingDummy(attacker))
+        if (!TrainingDummyIdentity.IsTrainingDummy(attacker))
         {
             return state;
         }

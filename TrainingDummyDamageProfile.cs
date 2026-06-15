@@ -20,7 +20,7 @@ internal static class TrainingDummyDamageTest
         }
 
         Character attacker = hit.GetAttacker();
-        if (!IsTrainingDummy(attacker))
+        if (!TrainingDummyIdentity.IsTrainingDummy(attacker))
         {
             return;
         }
@@ -37,7 +37,7 @@ internal static class TrainingDummyDamageTest
     internal static void StampPlacedDamageProfile(Piece piece)
     {
         if (piece == null ||
-            !IsTrainingDummy(piece) ||
+            !TrainingDummyIdentity.IsTrainingDummy(piece) ||
             !TryGetLocalDamageProfile(out DamageProfile profile))
         {
             return;
@@ -99,21 +99,6 @@ internal static class TrainingDummyDamageTest
         zdo.Set(DummyDamageProfileVersionKey, DummyDamageProfileVersion);
         zdo.Set(DummyDamageTypeKey, (int)damageType);
         zdo.Set(DummyDamageAmountKey, Mathf.Clamp(amount, 1f, 500f));
-    }
-
-    internal static bool IsTrainingDummy(Character character)
-    {
-        return TrainingDummyIdentity.IsTrainingDummy(character);
-    }
-
-    internal static bool IsTrainingDummy(Piece piece)
-    {
-        return TrainingDummyIdentity.IsTrainingDummy(piece);
-    }
-
-    internal static bool HasTrainingDummyZdoPrefab(Character character)
-    {
-        return TrainingDummyIdentity.HasTrainingDummyZdoPrefab(character);
     }
 
     private static bool TryReadStampedDamageProfile(Character attacker, out DamageProfile profile)
